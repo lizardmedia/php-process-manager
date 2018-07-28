@@ -1,0 +1,18 @@
+{
+  "name": "lizardmedia/php-process-manager",
+  "description": "PHP Process Manager",
+  "version": "1.0.0",
+  "license": [
+    "MIT"
+  ],
+  "authors": [
+    {
+      "name": "Michał Adamiak",
+      "email": "michal.adamiak@lizardmedia.pl"
+    },
+    {
+      "name": "Mateusz Procner",
+      "email": "mateusz.procner@lizardmedia.pl"
+    }
+  ]
+}
