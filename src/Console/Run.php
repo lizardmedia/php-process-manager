@@ -2,6 +2,7 @@
 
 namespace Phppm\Console;
 
+use Phppm\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,5 +42,8 @@ class Run extends Command
         $time = $input->getOption('interval') ?: self::DEFAULT_TIME;
 
         $style->comment('Execute with interval: ' . $time);
+
+        $process = new Process($time);
+        $process->exec();
     }
 }
