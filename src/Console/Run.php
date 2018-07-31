@@ -2,7 +2,6 @@
 
 namespace Phppm\Console;
 
-use Phppm\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,6 +35,7 @@ class Run extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $style = new SymfonyStyle($input, $output);
+        $script = $input->getArgument('script');
 
         $style->title('Script demonizer.');
 
@@ -43,7 +43,27 @@ class Run extends Command
 
         $style->comment('Execute with interval: ' . $time);
 
-        $worker = new \Phppm\ProcessWorker($input->getArgument('script'), $output, $time);
-        $worker->runProcess();
+        if (file_exists($script)) {
+            require_once $script;
+
+            $namespace = $this->getNamespace($script);
+            $worker = new \Phppm\ProcessWorker('\\' . $namespace, $output, $time);
+            $worker->runProcess();
+        }
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    protected function getNamespace(string $file) : string
+    {
+        $source = file_get_contents($file);
+        
+        if (preg_match('#^namespace\s+(.+?);.*class\s+(\w+).+;$#sm', $source, $matches)) {
+            return $matches[1].'\\'.$matches[2];
+        }
+
+        return '';
     }
 }
