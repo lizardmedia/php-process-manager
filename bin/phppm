@@ -6,16 +6,18 @@ $mainDir = __DIR__ . '/../';
 require_once $mainDir . 'vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
-use Phppm;
+use Phppm\Console;
 
 $composer = json_decode(
     file_get_contents($mainDir . 'composer.json')
 );
 
 $application = new Application;
+$run = new Console\Run;
 
 $application->setName($composer->description);
 $application->setVersion($composer->version);
+$application->add($run);
 
 $application->run();
 /** @todo time and memory usage */
