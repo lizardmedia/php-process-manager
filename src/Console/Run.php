@@ -2,6 +2,9 @@
 
 namespace Phppm\Console;
 
+use Phppm\Process;
+use Phppm\ProcessManager;
+use Phppm\SecondProcess;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,10 +48,10 @@ class Run extends Command
 
         if (file_exists($script)) {
             require_once $script;
-
             $namespace = $this->getNamespace($script);
-            $worker = new \Phppm\ProcessWorker('\\' . $namespace, $output, $time);
-            $worker->runProcess();
+
+            $processManager = new ProcessManager();
+            $processManager->addWorker('\\' . $namespace, $output, $time);
         }
     }
 
