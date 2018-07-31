@@ -11,6 +11,7 @@ class Process implements ProcessInterface
      */
     protected $output;
 
+    private $process;
     /**
      * Process constructor.
      * @param OutputInterface $output
@@ -29,7 +30,7 @@ class Process implements ProcessInterface
 
     public function open()
     {
-        // TODO: Implement open() method.
+
     }
 
     public function close()
