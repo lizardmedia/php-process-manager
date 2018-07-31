@@ -14,10 +14,12 @@ $composer = json_decode(
 
 $application = new Application;
 $run = new Console\Run;
+$worker = new Console\Worker;
 
 $application->setName($composer->description);
 $application->setVersion($composer->version);
 $application->add($run);
+$application->add($worker);
 
 $application->run();
 /** @todo time and memory usage */

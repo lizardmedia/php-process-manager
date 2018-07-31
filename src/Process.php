@@ -23,28 +23,10 @@ class Process implements ProcessInterface
 
     public function exec()
     {
+
         $now = \DateTime::createFromFormat('U.u', microtime(true));
         $time = $now->format("Y-d-m H:i:s.u");
         $this->output->writeln("[$time] heartbeat");
     }
 
-    public function open()
-    {
-
-    }
-
-    public function close()
-    {
-        // TODO: Implement close() method.
-    }
-
-    public function terminate()
-    {
-        // TODO: Implement terminate() method.
-    }
-
-    public function status()
-    {
-        // TODO: Implement status() method.
-    }
 }
