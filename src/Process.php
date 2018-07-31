@@ -2,27 +2,29 @@
 
 namespace Phppm;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 class Process implements ProcessInterface
 {
-    private $interval;
+    /**
+     * @var OutputInterface 
+     */
+    protected $output;
 
     /**
      * Process constructor.
-     * @param int $interval in miliseconds
+     * @param OutputInterface $output
      */
-    public function __construct(int $interval = 100)
+    public function __construct(OutputInterface $output)
     {
-        $this->interval = $interval;
-
+        $this->output = $output;
     }
 
     public function exec()
     {
-        while (true) {
-
-            usleep($this->interval*1000);
-
-        }
+        $now = \DateTime::createFromFormat('U.u', microtime(true));
+        $time = $now->format("Y-d-m H:i:s.u");
+        $this->output->writeln("[$time] heartbeat");
     }
 
     public function open()
@@ -44,6 +46,4 @@ class Process implements ProcessInterface
     {
         // TODO: Implement status() method.
     }
-
-
 }

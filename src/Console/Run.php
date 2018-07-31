@@ -41,5 +41,8 @@ class Run extends Command
         $time = $input->getOption('interval') ?: self::DEFAULT_TIME;
 
         $style->comment('Execute with interval: ' . $time);
+
+        $worker = new \Phppm\ProcessWorker($input->getArgument('script'), $output, $time);
+        $worker->runProcess();
     }
 }
