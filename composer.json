@@ -1,7 +1,7 @@
 {
   "name": "lizardmedia/php-process-manager",
   "description": "PHP Process Manager",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": [
     "MIT"
   ],
@@ -14,5 +14,18 @@
       "name": "Mateusz Procner",
       "email": "mateusz.procner@lizardmedia.pl"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Phppm\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PhppmTests\\": "tests/"
+    }
+  },
+  "bin": [
+    "bin/phppm"
   ]
 }
