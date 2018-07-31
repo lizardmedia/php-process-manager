@@ -4,7 +4,7 @@ namespace Phppm;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Process implements ProcessInterface
+abstract class Process implements ProcessInterface
 {
     /**
      * @var OutputInterface
@@ -20,10 +20,12 @@ class Process implements ProcessInterface
         $this->output = $output;
     }
 
-    public function exec()
+    /**
+     * @return string
+     */
+    protected function getFormattedTime() : string
     {
         $now = \DateTime::createFromFormat('U.u', microtime(true));
-        $time = $now->format("Y-d-m H:i:s.u");
-        $this->output->writeln("[$time] heartbeat");
+        return $now->format("Y-d-m H:i:s.u");
     }
 }

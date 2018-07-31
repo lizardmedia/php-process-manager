@@ -16,8 +16,20 @@ class ProcessManager implements ProcessManagerInterface
             2 => ["file", "/tmp/error-output.txt", "a"] // stderr is a file to write to
         ];
 
-        $process = proc_open('./bin/phppm worker -i 1000 Phppm\\\\Process', $descriptorspec, $this->pipes);
+        $process = proc_open('php', $descriptorspec, $this->pipes);
 
+        dump(proc_get_status($process));
+
+        stream_set_blocking($this->pipes[1], 0);
+        stream_set_blocking($this->pipes[2], 0);
+        dump($this->pipes);
+        
+//        fclose($this->pipes[0]);
+//        fclose($this->pipes[1]);
+        
+        proc_close($process);
+        
+        
 //        $this->workers[] = $worker;
     }
 

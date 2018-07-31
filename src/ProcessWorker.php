@@ -20,9 +20,10 @@ class ProcessWorker
      * ProcessWorker constructor.
      *
      * @param string $process
+     * @param OutputInterface $output
      * @param int $interval
      */
-    public function __construct($process, OutputInterface $output, int $interval = 100)
+    public function __construct(string $process, OutputInterface $output, int $interval = 100)
     {
         $this->process = new $process($output);
         $this->interval = $interval;
