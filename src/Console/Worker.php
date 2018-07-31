@@ -2,9 +2,6 @@
 
 namespace Phppm\Console;
 
-use Phppm\Process;
-use Phppm\ProcessManager;
-use Phppm\SecondProcess;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,8 +10,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Worker extends Command
 {
-    const DEFAULT_TIME = 100;
-
     protected function configure()
     {
         $this->setName('worker')
@@ -39,17 +34,13 @@ class Worker extends Command
     {
         $style = new SymfonyStyle($input, $output);
 
-        $style->title('Script demonizer.');
+        $style->title('Script worker.');
 
-        $time = $input->getOption('interval') ?: self::DEFAULT_TIME;
+        $time = $input->getOption('interval') ?: Run::DEFAULT_TIME;
 
         $style->comment('Execute with interval: ' . $time);
 
-
         $worker = new \Phppm\ProcessWorker($input->getArgument('script'), $output, $time);
         $worker->runProcess();
-
-
-
     }
 }

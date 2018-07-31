@@ -11,7 +11,6 @@ class SecondProcess implements ProcessInterface
      */
     protected $output;
 
-    private $process;
     /**
      * Process constructor.
      * @param OutputInterface $output

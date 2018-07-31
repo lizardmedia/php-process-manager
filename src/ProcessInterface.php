@@ -9,5 +9,4 @@ interface ProcessInterface
     public function __construct(OutputInterface $output);
 
     public function exec();
-
 }
