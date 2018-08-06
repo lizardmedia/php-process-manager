@@ -27,12 +27,12 @@ Download zip archive and unpack it to your project
 ### CLI ###
 Commands using Symfony console:
 ```$xslt
-./bin/background {script to run} {log file}
+./bin/phppm-background {script to run} {log file}
 ```
 
 Example:
 ```$xslt
-./bin/background "example/ProcessExample.php" script.log > pid
+./bin/phppm-background "example/ProcessExample.php" script.log > pid
 ```
 
 ## Contributing
