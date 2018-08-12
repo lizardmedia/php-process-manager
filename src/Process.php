@@ -12,18 +12,19 @@ abstract class Process implements ProcessInterface
     protected $output;
 
     /**
-     * @var int
+     * @var ProcessWorker
      */
-    protected $pid;
+    protected $worker;
 
     /**
      * Process constructor.
      * @param OutputInterface $output
+     * @param ProcessWorker $worker
      */
-    public function __construct(OutputInterface $output)
+    public function __construct(OutputInterface $output, ProcessWorker $worker)
     {
+        $this->worker = $worker;
         $this->output = $output;
-        $this->pid = getmypid();
     }
 
     /**
@@ -32,7 +33,7 @@ abstract class Process implements ProcessInterface
     protected function getFormattedTime() : string
     {
         $now = \DateTime::createFromFormat('U.u', microtime(true));
-        return $now->format("Y-d-m H:i:s.u");
+        return $now->format('Y-d-m H:i:s.u');
     }
 
     /**
@@ -40,6 +41,6 @@ abstract class Process implements ProcessInterface
      */
     public function getPid() : int
     {
-        return $this->pid;
+        return $this->worker->getPid();
     }
 }
