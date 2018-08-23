@@ -8,18 +8,20 @@ require_once $mainDir . 'vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use Phppm\Console;
 
+$commands = [];
 $composer = json_decode(
     file_get_contents($mainDir . 'composer.json')
 );
 
 $application = new Application;
-$run = new Console\Run;
-$worker = new Console\Worker;
+
+$commands[] = new Console\Run;
+$commands[] = new Console\Worker;
+$commands[] = new Console\MasterProcess();
 
 $application->setName($composer->description);
 $application->setVersion($composer->version);
-$application->add($run);
-$application->add($worker);
+$application->addCommands($commands);
 
 $application->run();
 /** @todo time and memory usage */
