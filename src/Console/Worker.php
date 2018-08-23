@@ -47,7 +47,6 @@ class Worker extends Command
 
             $worker = new \Phppm\ProcessWorker('\\' . $namespace, $output, $time);
             $worker->runProcess();
-
         }
     }
 
