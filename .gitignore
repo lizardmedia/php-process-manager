@@ -1,1 +1,3 @@
 vendor
+process/main.json
+process/processes/*.json
