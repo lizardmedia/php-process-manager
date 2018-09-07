@@ -7,13 +7,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Phppm\ProcessWorker;
 
-class Worker extends Command
+class Daemon extends Command
 {
+    const DEFAULT_TIME = 100;
+
     protected function configure()
     {
-        $this->setName('worker')
-            ->setDescription('Execute worker with given process script.')
+        $this->setName('daemon')
+            ->setDescription('Run given script as demon process.')
             ->setHelp('');
 
         $this->addArgument(
@@ -35,9 +38,9 @@ class Worker extends Command
         $style = new SymfonyStyle($input, $output);
         $script = $input->getArgument('script');
 
-        $style->title('Script worker.');
+        $style->title('Script demonizer.');
 
-        $time = $input->getOption('interval') ?: Run::DEFAULT_TIME;
+        $time = $input->getOption('interval') ?: self::DEFAULT_TIME;
 
         $style->comment('Execute with interval: ' . $time);
 
@@ -45,7 +48,7 @@ class Worker extends Command
             require_once $script;
             $namespace = $this->getNamespace($script);
 
-            $worker = new \Phppm\ProcessWorker('\\' . $namespace, $output, $time);
+            $worker = new ProcessWorker('\\' . $namespace, $output, $time);
             $worker->runProcess();
         }
     }

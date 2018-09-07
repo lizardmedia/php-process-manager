@@ -15,8 +15,7 @@ $composer = json_decode(
 
 $application = new Application;
 
-$commands[] = new Console\Run;
-$commands[] = new Console\Worker;
+$commands[] = new Console\Daemon;
 $commands[] = new Console\MasterProcess();
 
 $application->setName($composer->description);
