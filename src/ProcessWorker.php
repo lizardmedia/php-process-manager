@@ -53,6 +53,31 @@ class ProcessWorker
         $this->pid = getmypid();
         $this->isRunning = true;
 
+        $suspended = false;
+
+
+
+        declare(ticks=1);
+
+
+        $pid = pcntl_fork();
+        if ($pid == -1) {
+            die("could not fork");
+        } elseif ($pid) {
+            echo 'MASTER: ' . getmypid() . "; $pid" . PHP_EOL;
+            exit(); // we are the parent
+        } else {
+            echo 'child: ' . getmypid() . PHP_EOL;
+            // we are the child
+        }
+
+        // detatch from the controlling terminal
+        if (posix_setsid() == -1) {
+            die("could not detach from terminal");
+        }
+
+        dump(getmypid());
+
         while (true) {
             $this->process->exec();
             usleep($this->interval * 1000);
