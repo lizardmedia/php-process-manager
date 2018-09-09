@@ -56,6 +56,38 @@ class ProcessWorker
         $suspended = false;
 
 
+        $handler = function ($signo) use (&$suspended) {
+            switch ($signo) {
+                case SIGTERM:
+                    // handle shutdown tasks
+                    echo "I was terminated :( \n";
+                    exit;
+                case SIGHUP:
+                    pcntl_sigprocmask(SIG_BLOCK, array(SIGCONT));
+
+//            echo "Sending SIGHUP to self\n";
+//            posix_kill(posix_getpid(), SIGHUP);
+
+                    echo "Waiting for signals\n";
+                    $info = array();
+                    pcntl_sigwaitinfo(array(SIGCONT), $info);
+                    // handle restart tasks
+                    break;
+
+                case SIGINT:
+                    echo "I was interrupted. \n";
+                    exit;
+
+                case SIGKILL:
+                    echo "I was killed X| \n";
+                    exit;
+
+//                    SIGXCPU
+//                    SIGXFSZ
+                default:
+                    // handle all other signals
+            }
+        };
 
         declare(ticks=1);
 
@@ -76,6 +108,11 @@ class ProcessWorker
             die("could not detach from terminal");
         }
 
+        // setup signal handlers
+        pcntl_signal(SIGTERM, $handler);
+        pcntl_signal(SIGHUP, $handler);
+        pcntl_signal(SIGINT, $handler);
+        pcntl_signal(SIGKILL, $handler);
         dump(getmypid());
 
         while (true) {
