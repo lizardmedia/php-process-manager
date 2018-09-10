@@ -9,4 +9,6 @@ interface ProcessInterface
     public function __construct(OutputInterface $output, ProcessWorker $worker);
 
     public function exec();
+
+    public function signalHandler();
 }
