@@ -53,14 +53,11 @@ class ProcessWorker
         $this->pid = getmypid();
         $this->isRunning = true;
 
-        $suspended = false;
-
-
-        $handler = function ($signo) use (&$suspended) {
-            switch ($signo) {
+        $handler = function ($signal) {
+            switch ($signal) {
                 case SIGTERM:
                     // handle shutdown tasks
-                    echo "I was terminated :( \n";
+                    echo 'I was terminated :(' . PHP_EOL;
                     exit;
                 case SIGHUP:
                     pcntl_sigprocmask(SIG_BLOCK, array(SIGCONT));
@@ -68,18 +65,18 @@ class ProcessWorker
 //            echo "Sending SIGHUP to self\n";
 //            posix_kill(posix_getpid(), SIGHUP);
 
-                    echo "Waiting for signals\n";
+                    echo 'Waiting for signals' . PHP_EOL;
                     $info = array();
                     pcntl_sigwaitinfo(array(SIGCONT), $info);
                     // handle restart tasks
                     break;
 
                 case SIGINT:
-                    echo "I was interrupted. \n";
+                    echo 'I was interrupted.' . PHP_EOL;
                     exit;
 
                 case SIGKILL:
-                    echo "I was killed X| \n";
+                    echo 'I was killed X|' . PHP_EOL;
                     exit;
 
 //                    SIGXCPU
