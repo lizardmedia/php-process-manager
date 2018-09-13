@@ -32,6 +32,11 @@ class ProcessWorker
     protected $stop = false;
 
     /**
+     * @var array
+     */
+    protected $handlers;
+
+    /**
      * ProcessWorker constructor.
      *
      * @param string $process
@@ -49,6 +54,8 @@ class ProcessWorker
         if ($this->isRunning) {
             return;
         }
+
+        $this->handlers = array_merge($this->signalHandler(), $this->process->signalHandler());
 
         $this->pid = getmypid();
         $this->isRunning = true;
@@ -119,6 +126,23 @@ class ProcessWorker
             if ($this->stop) {
                 break;
             }
+        }
+    }
+
+    protected function signalHandler()
+    {
+        return [
+            SIGTERM => function () {
+                echo 'I was terminated :(' . PHP_EOL;
+                exit;
+            }
+        ];
+    }
+
+    protected function registerHandlers()
+    {
+        foreach ($this->handlers as $signal => $handler) {
+            pcntl_signal($signal, $handler);
         }
     }
 
