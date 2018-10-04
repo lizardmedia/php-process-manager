@@ -9,7 +9,7 @@ class Process extends BaseProcess
     
     //read process descriptions from files and check their work
 
-    public function exec() : void
+    public function exec()
     {
         $time = $this->getFormattedTime();
         $this->output->writeln("[$time] heartbeat {$this->getPid()}");
