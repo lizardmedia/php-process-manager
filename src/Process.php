@@ -44,11 +44,11 @@ abstract class Process implements ProcessInterface
         return $this->worker->getPid();
     }
 
+    /**
+     * @return array
+     */
     public function signalHandler() : array
     {
         return [];
-        /*return [
-            SIGKILL => function (){}
-        ];*/
     }
 }
