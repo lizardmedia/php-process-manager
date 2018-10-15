@@ -32,7 +32,7 @@ abstract class Process implements ProcessInterface
      */
     protected function getFormattedTime() : string
     {
-        $now = \DateTime::createFromFormat('U.u', microtime(true));
+        $now = \DateTime::createFromFormat('U.u', microtime(true) -0.0001);
         return $now->format('Y-d-m H:i:s.u');
     }
 
