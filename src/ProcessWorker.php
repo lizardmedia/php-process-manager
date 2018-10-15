@@ -55,9 +55,7 @@ class ProcessWorker
             return;
         }
 
-        $this->handlers = array_merge($this->signalHandler(), $this->process->signalHandler());
-
-        $this->pid = getmypid();
+        $this->handlers = array_replace($this->signalHandler(), $this->process->signalHandler());
         $this->isRunning = true;
 
         declare(ticks=1);
@@ -70,6 +68,7 @@ class ProcessWorker
             echo 'MASTER: ' . getmypid() . "; $pid" . PHP_EOL;
             exit(); // we are the parent
         } else {
+            $this->pid = getmypid();
             echo 'child: ' . getmypid() . PHP_EOL;
             // we are the child
         }
@@ -112,10 +111,6 @@ class ProcessWorker
             SIGINT => function () {
                 echo 'I was interrupted.' . PHP_EOL;
                 $this->killMe();
-            },
-            SIGKILL => function () {
-                echo 'I was killed X(' . PHP_EOL;
-                $this->killMe(1);
             },
             SIGXCPU => function () {
                 $limits = posix_getrlimit();
