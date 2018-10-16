@@ -24,6 +24,16 @@ class ProcessWorker
     /**
      * @var bool
      */
+    protected $debug = false;
+
+    /**
+     * @var bool
+     */
+    protected $alarm = false;
+
+    /**
+     * @var bool
+     */
     protected $isRunning = false;
 
     /**
@@ -93,37 +103,79 @@ class ProcessWorker
 
     /**
      * @return array
+     *
+     * @see http://www.gnu.org/software/libc/manual/html_node/Standard-Signals.html#Standard-Signals
      */
     protected function signalHandler() : array
     {
         return [
             SIGTERM => function () {
                 echo 'I was terminated :(' . PHP_EOL;
-                $this->killMe();
+                $this->killMe(SIGTERM);
             },
             SIGHUP => function () {
                 pcntl_sigprocmask(SIG_BLOCK, [SIGCONT]);
 
-                echo 'Waiting for signals' . PHP_EOL;
+                echo 'Waiting for signals. Process suspended.' . PHP_EOL;
                 $info = [];
                 pcntl_sigwaitinfo([SIGCONT], $info);
             },
+            SIGABRT => function () {
+                echo 'I was aborted.' . PHP_EOL;
+                $this->killMe(SIGABRT);
+            },
             SIGINT => function () {
                 echo 'I was interrupted.' . PHP_EOL;
-                $this->killMe();
+                $this->killMe(SIGINT);
             },
             SIGXCPU => function () {
                 $limits = posix_getrlimit();
-                echo 'Overflow CPU limits: soft-' . $limits['soft cpu'] . '; hard-' . $limits['hard cpu'] . PHP_EOL;
-                $this->killMe(1);
-            }
+                echo 'Overflow CPU limits: soft-'
+                    . $limits['soft cpu']
+                    . '; hard-'
+                    . $limits['hard cpu']
+                    . PHP_EOL;
+                $this->killMe(SIGXCPU);
+            },
+            SIGALRM => function () {
+                $this->alarm = true;
+            },
+            SIGQUIT => function () {
+                echo 'I was quited.' . PHP_EOL;
+                $this->killMe();
+            },
+            SIGXFSZ => function () {
+                $limits = posix_getrlimit();
+                echo 'File size limit exceeded: soft-'
+                    . $limits['soft filesize']
+                    . '; hard-'
+                    . $limits['hard filesize']
+                    . PHP_EOL;
+                $this->killMe(SIGXFSZ);
+            },
+            SIGTTOU => function () {
+                //write to log
+            },
+            SIGUSR1 => function () {
+                echo 'User defined signal: ' . SIGUSR1;
+            },
+            SIGUSR2 => function () {
+                echo 'User defined signal: ' . SIGUSR2;
+            },
+            SIGINFO => function () {
+                echo 'Process information.';
+            },
+            SIGTRAP => function () {
+                $this->debug = $this->debug ? false : true;
+                echo 'Switch on/off debug mode.';
+            },
         ];
     }
 
     /**
      * @param int $code
      */
-    protected function killMe($code = 0)
+    protected function killMe(int $code = 0)
     {
         exit($code);
     }
@@ -156,5 +208,26 @@ class ProcessWorker
         $this->stop = true;
 
         return $this;
+    }
+
+    /**
+     * Return and set to false SIGALRM triggering
+     *
+     * @return bool
+     */
+    public function hasAlarm() : bool
+    {
+        $alarm = $this->alarm;
+        $this->alarm = false;
+
+        return $alarm;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebug() : bool
+    {
+        return $this->debug;
     }
 }
