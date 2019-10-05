@@ -1,0 +1,5 @@
+signals support
+each proces have own work file, inside pid
+sockets to comunicate
+heartbeat info
+log support
