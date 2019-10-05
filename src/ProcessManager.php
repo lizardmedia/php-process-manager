@@ -27,7 +27,8 @@ class ProcessManager implements ProcessManagerInterface
 //        fclose($this->pipes[0]);
 //        fclose($this->pipes[1]);
         
-        proc_close($process);
+//        proc_close($process);
+        proc_terminate($process);
         
         
 //        $this->workers[] = $worker;

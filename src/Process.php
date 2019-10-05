@@ -12,12 +12,19 @@ abstract class Process implements ProcessInterface
     protected $output;
 
     /**
+     * @var int
+     */
+    protected $pid;
+
+    /**
      * Process constructor.
      * @param OutputInterface $output
      */
-    public function __construct(OutputInterface $output)
+    public function __construct(OutputInterface $output, $worker)
     {
         $this->output = $output;
+        $this->pid = getmypid();
+        $this->worker = $worker;
     }
 
     /**
@@ -27,5 +34,13 @@ abstract class Process implements ProcessInterface
     {
         $now = \DateTime::createFromFormat('U.u', microtime(true));
         return $now->format("Y-d-m H:i:s.u");
+    }
+
+    /**
+     * @return int
+     */
+    public function getPid() : int
+    {
+        return $this->pid;
     }
 }

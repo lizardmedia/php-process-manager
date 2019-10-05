@@ -25,8 +25,11 @@ class ProcessWorker
      */
     public function __construct(string $process, OutputInterface $output, int $interval = 100)
     {
-        $this->process = new $process($output);
+        $this->pid = getmypid();
+        $this->process = new $process($output, $this);
         $this->interval = $interval;
+
+        //???
     }
 
     public function runProcess()
